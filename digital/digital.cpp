@@ -164,8 +164,16 @@ void A_h1(const vector<vector<int> > &start, const vector<vector<int> > &target)
     }while(!StatesQueue.empty());
 }
 
-// helper: stateMatrix transition. returns 1 when stateMatrix is actually changed, 0 when no change happens
-int State_Trans(const vector<vector<int> > old_state, vector<vector<int>> &new_state,Actions action){
+/****************************************************************************/
+int State_Trans(const vector<vector<int> > old_state, vector<vector<int>> &new_state,Actions action)
+/***
+ *
+ * @param old_state
+ * @param new_state
+ * @param action
+ * @return
+ */
+{
     new_state = old_state;
     int i_des=-1;int j_des=-1;
     int flag=0;
