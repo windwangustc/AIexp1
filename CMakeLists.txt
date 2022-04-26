@@ -3,4 +3,5 @@ project(exp1)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(exp1 main.cpp)
+add_executable(exp1 digital/digital.cpp)
+#add_executable(exp1 csp/csp.cpp)
