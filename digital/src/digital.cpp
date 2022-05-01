@@ -145,9 +145,14 @@ int CountMisplacedStars(const vector<vector<int>> &sourceMatrix, const vector<ve
 int h2(const vector<vector<int>> &sourceMatrix, const vector<vector<int>> &targetMatrix)
 /***
  * @Description 启发式函数h2
+ *              h2 = 棋盘除黑洞外每个点的 min( M,T1,T2,T3,T4) 加和
+ *              其中对于 source 的点 a 到 target 的点 b ，
+ *              M = ManhattanDistance(a,b)
+ *              Ti = ManhattanDistance(a，虫洞i) + ManhattanDistance(虫洞1,i)
+ *              上述h2是最简单的松弛解，因此为可采纳的启发式函数
  * @param sourceMatrix
  * @param targetMatrix
- * @return
+ * @return 棋盘除黑洞外每个点的 min( M,T1,T2,T3,T4) 加和
  */
 {
     int sum=0;
@@ -176,6 +181,7 @@ int h2(const vector<vector<int>> &sourceMatrix, const vector<vector<int>> &targe
                 tmpV.push_back(T2);
                 tmpV.push_back(T3);
                 tmpV.push_back(T4);
+                //取最小距离
                 sum += *min_element(tmpV.begin(),tmpV.end());
             }
         }
