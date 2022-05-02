@@ -4,17 +4,17 @@
 #include "a.h"
 
 int main (int argc,char* argv []){
-//    if (argc != 4 ) {
-//        throw logic_error("Incorrect Number of Argument!");
-//    }
-//    string arg1 =  argv[1];         //运行函数名 A_h1 A_h2 IDA_h2 其中之一
-//    string arg2 =  argv[2];         //输入文件路径 input.txt
-//    string arg3 =  argv[3];         //目标文件路径 target.txt
-    string arg1="IDA_h2";
-    string arg2="input01.txt";
-    string arg3="target01.txt";
-    arg2 = "../../data/" + arg2;
-    arg3 = "../../data/" + arg3;
+    if (argc != 4 ) {
+        throw logic_error("Incorrect Number of Argument!");
+    }
+    string arg1 =  argv[1];         //运行函数名 A_h1 A_h2 IDA_h2 其中之一
+    string arg2 =  argv[2];         //输入文件路径 input.txt
+    string arg3 =  argv[3];         //目标文件路径 target.txt
+//    string arg1="IDA_h2";
+//    string arg2="input01.txt";
+//    string arg3="target01.txt";
+//    arg2 = "../../data/" + arg2;
+//    arg3 = "../../data/" + arg3;
 
     if(arg1 == "A_h1"){
         ofstream output_A_h1;
