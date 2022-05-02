@@ -44,6 +44,8 @@ struct SearchStates{
     SearchStates(int c, int d,int a,struct SearchStates* p, vector<vector<int>> m): cost(c), depth(d), action(a), previousState(p), stateMatrix(std::move(m)) {}
 };
 SearchStates *g_goalState;
+//存储malloc的全局指针，用于运行结束后释放
+vector<SearchStates*>g_HeapStorage;
 
 /*A_h1 A_h2 IDA_h2 4个函数，分别代表A* 和 迭代A* 及2种启发函数*/
 void A_h1(const vector<vector<int> > &start, const vector<vector<int> > &target);

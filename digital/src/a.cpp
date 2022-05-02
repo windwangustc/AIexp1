@@ -11,8 +11,8 @@ int main (int argc,char* argv []){
 //    string arg2 =  argv[2];         //输入文件路径 input.txt
 //    string arg3 =  argv[3];         //目标文件路径 target.txt
     string arg1="IDA_h2";
-    string arg2="input11.txt";
-    string arg3="target11.txt";
+    string arg2="input01.txt";
+    string arg3="target01.txt";
     arg2 = "../../data/" + arg2;
     arg3 = "../../data/" + arg3;
 
@@ -91,6 +91,12 @@ int main (int argc,char* argv []){
         output_IDA_h2.close();
     }else{
         __throw_invalid_argument("Arguments must be one of A_h1 A_h2 IDA_h1 IDA_h2!");
+    }
+
+    //free heap memory
+    while(!g_HeapStorage.empty()){
+        free(g_HeapStorage[g_HeapStorage.size()-1]);
+        g_HeapStorage.pop_back();
     }
     cout<<"Normal End of Execution."<<endl;
     return 0;
@@ -223,6 +229,7 @@ void A_h1(const vector<vector<int> > &start, const vector<vector<int> > &target)
         if(currentBest == nullptr){
             throw logic_error("Malloc Failed");
         }
+        g_HeapStorage.push_back(currentBest);    //运行结束后free
         //获得当前最优
         *currentBest = StatesQueue.top();
         StatesQueue.pop();
@@ -272,6 +279,7 @@ void A_h2(const vector<vector<int> > &start, const vector<vector<int> > &target)
         if(currentBest == nullptr){
             throw logic_error("Malloc Failed");
         }
+        g_HeapStorage.push_back(currentBest);    //运行结束后free
         //获得当前最优
         *currentBest = StatesQueue.top();
         StatesQueue.pop();
@@ -333,6 +341,7 @@ void IDA_h1(const vector<vector<int> > &start, const vector<vector<int> >&target
             if(currentBest == nullptr){
                 throw logic_error("Malloc Failed");
             }
+            g_HeapStorage.push_back(currentBest);    //运行结束后free
             //获得当前最优
             *currentBest = StatesQueue.top();
             StatesQueue.pop();
@@ -405,6 +414,7 @@ void IDA_h2(const vector<vector<int> > &start, const vector<vector<int> >&target
             if(currentBest == nullptr){
                 throw logic_error("Malloc Failed");
             }
+            g_HeapStorage.push_back(currentBest);    //运行结束后free
             //获得当前最优
             *currentBest = StatesQueue.top();
             StatesQueue.pop();
@@ -452,7 +462,7 @@ int ChangeStates(const vector<vector<int> >& old_state, vector<vector<int>> &new
     new_state = old_state;
     int i_des=-1;int j_des=-1;
 
-    // find where the ship is
+    //获取飞船位置
     int i_pos=-1;int j_pos=-1;
     for(int i=0;i<old_state.size();i++){
         for (int j = 0; j < old_state[0].size(); ++j) {
@@ -463,9 +473,8 @@ int ChangeStates(const vector<vector<int> >& old_state, vector<vector<int>> &new
         }
     }
 
-    if(action!=L && action!=R && action!=U && action!=D){return FAILED;}
     //越界检查
-    else if(action==U && (i_pos==0&&j_pos!=2)){return FAILED;}
+    if(action==U && (i_pos==0&&j_pos!=2)){return FAILED;}
     else if(action==D && (i_pos==4&&j_pos!=2)){return FAILED;}
     else if(action==L && (j_pos==0&&i_pos!=2)){return FAILED;}
     else if(action==R && (j_pos==4&&i_pos!=2)){return FAILED;}
@@ -591,5 +600,5 @@ void WriteFile(ofstream &fileStream,struct SearchStates *goalState){
         fileStream << ",";
     }
     //递归free之前malloc的空间
-    free(goalState);
+    //free(goalState);
 }
