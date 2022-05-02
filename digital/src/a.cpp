@@ -1,25 +1,28 @@
 //
 // Created by Chen Wang on 2022/4/18.
 //
-#include "digital.h"
+#include "a.h"
 
 int main (int argc,char* argv []){
-    if (argc != 4 ) {
-        throw logic_error("Incorrect Number of Argument!");
-    }
-    string arg1 =  argv[1];         //运行函数名 A_h1 A_h2 IDA_h2 其中之一
-    string arg2 =  argv[2];         //输入文件路径 input.txt
-    string arg3 =  argv[3];         //目标文件路径 target.txt
-    arg2 = "../data/" + arg2;
-    arg3 = "../data/" + arg3;
+//    if (argc != 4 ) {
+//        throw logic_error("Incorrect Number of Argument!");
+//    }
+//    string arg1 =  argv[1];         //运行函数名 A_h1 A_h2 IDA_h2 其中之一
+//    string arg2 =  argv[2];         //输入文件路径 input.txt
+//    string arg3 =  argv[3];         //目标文件路径 target.txt
+    string arg1="A_h1";
+    string arg2="input11.txt";
+    string arg3="target11.txt";
+    arg2 = "../../data/" + arg2;
+    arg3 = "../../data/" + arg3;
 
     if(arg1 == "A_h1"){
         ofstream output_A_h1;
-        output_A_h1.open("../digital/output/output_A_h1.txt", ios::out | ios::app ); //追加写
+        output_A_h1.open("../../digital/output/output_A_h1.txt", ios::out | ios::app ); //追加写
         if(!output_A_h1.is_open()){
             throw logic_error("open output_A_h1.txt Failed!");
         }
-
+        cout <<"Computing "<<arg1<< " "<<arg2 <<" "<< arg3 <<endl;
         //读取源、目标文件中的矩阵
         vector<vector<int>> sourceMatrix = ReadFile(arg2);
         vector<vector<int>> targetMatrix = ReadFile(arg3);
@@ -27,17 +30,18 @@ int main (int argc,char* argv []){
         start = clock();
         A_h1(sourceMatrix,targetMatrix);
         end = clock();
+        cout <<double(end-start)/CLOCKS_PER_SEC<<endl;
         WriteFile(output_A_h1,g_goalState);
         output_A_h1 <<double(end-start)/CLOCKS_PER_SEC<<endl;
         output_A_h1.close();
 
     } else if (arg1 == "A_h2"){
         ofstream output_A_h2;
-        output_A_h2.open("../digital/output/output_A_h2.txt", ios::out | ios::app ); //追加写
+        output_A_h2.open("../../digital/output/output_A_h2.txt", ios::out | ios::app ); //追加写
         if(!output_A_h2.is_open()){
             throw logic_error("open output_A_h2.txt Failed!");
         }
-
+        cout <<"Computing "<<arg1<< " "<<arg2 <<" "<< arg3 <<endl;
         //读取源、目标文件中的矩阵
         vector<vector<int>> sourceMatrix = ReadFile(arg2);
         vector<vector<int>> targetMatrix = ReadFile(arg3);
@@ -45,16 +49,17 @@ int main (int argc,char* argv []){
         start = clock();
         A_h2(sourceMatrix,targetMatrix);
         end = clock();
+        cout <<double(end-start)/CLOCKS_PER_SEC<<endl;
         WriteFile(output_A_h2,g_goalState);
         output_A_h2 <<double(end-start)/CLOCKS_PER_SEC<<endl;
         output_A_h2.close();
     } else if (arg1 == "IDA_h1"){
         ofstream output_IDA_h1;
-        output_IDA_h1.open("../digital/output/output_IDA_h1.txt", ios::out | ios::app ); //追加写
+        output_IDA_h1.open("../../digital/output/output_IDA_h1.txt", ios::out | ios::app ); //追加写
         if(!output_IDA_h1.is_open()){
             throw logic_error("open output_IDA_h1.txt Failed!");
         }
-
+        cout <<"Computing "<<arg1<< " "<<arg2 <<" "<< arg3 <<endl;
         //读取源、目标文件中的矩阵
         vector<vector<int>> sourceMatrix = ReadFile(arg2);
         vector<vector<int>> targetMatrix = ReadFile(arg3);
@@ -62,16 +67,17 @@ int main (int argc,char* argv []){
         start = clock();
         A_h2(sourceMatrix,targetMatrix);
         end = clock();
+        cout <<double(end-start)/CLOCKS_PER_SEC<<endl;
         WriteFile(output_IDA_h1,g_goalState);
         output_IDA_h1 <<double(end-start)/CLOCKS_PER_SEC<<endl;
         output_IDA_h1.close();
     } else if (arg1 == "IDA_h2"){
         ofstream output_IDA_h2;
-        output_IDA_h2.open("../digital/output/output_IDA_h2.txt", ios::out | ios::app ); //追加写
+        output_IDA_h2.open("../../digital/output/output_IDA_h2.txt", ios::out | ios::app ); //追加写
         if(!output_IDA_h2.is_open()){
             throw logic_error("open output_IDA_h2.txt Failed!");
         }
-
+        cout <<"Computing "<<arg1<< " "<<arg2 <<" "<< arg3 <<endl;
         //读取源、目标文件中的矩阵
         vector<vector<int>> sourceMatrix = ReadFile(arg2);
         vector<vector<int>> targetMatrix = ReadFile(arg3);
@@ -79,15 +85,19 @@ int main (int argc,char* argv []){
         start = clock();
         A_h2(sourceMatrix,targetMatrix);
         end = clock();
+        cout <<double(end-start)/CLOCKS_PER_SEC<<endl;
         WriteFile(output_IDA_h2,g_goalState);
         output_IDA_h2 <<double(end-start)/CLOCKS_PER_SEC<<endl;
         output_IDA_h2.close();
+    }else{
+        __throw_invalid_argument("Arguments must be one of A_h1 A_h2 IDA_h1 IDA_h2!");
     }
+    cout<<"Normal End of Execution."<<endl;
     return 0;
 }
 
 /****************************************************************************/
-vector<vector<int>> ReadFile(string FileName)
+vector<vector<int>> ReadFile(const string& FileName)
 /***
  * @Description 读取input.txt内表示的矩阵
  * @param FileName

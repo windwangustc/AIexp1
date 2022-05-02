@@ -27,32 +27,77 @@ using namespace std;
 class Workers{
     int workerID;        //工人序号
     int title;           //senior or junior
-    int workedDays;      //本周已工作的天数
-    int restedDays;      //目前为止，本周已经连续休息的天数 初始值目前设为0，但可能有问题
-    int lastWorkedDay;   //最后一次工作是在哪天
+    int workedDays[7]={}; //上班为1，休息为0
+    //下面信息均由workedDays[7]算出。也可以根据需要看是否需要固定这些信息。
+    //int workedDays;      //本周已工作的天数
+    //int restedDays;      //目前为止，本周已经连续休息的天数 初始值目前设为0，但可能有问题
+    //int lastWorkedDay;   //最后一次工作是在哪天
+
 public:
     //构造函数，可按需求修改
-    Workers(int WorkerID,int Title): workerID(WorkerID), title(Title), workedDays(0), restedDays(0), lastWorkedDay(0) {}
+    Workers(int WorkerID,int Title) : workerID(WorkerID),title(Title) {}
     int getID() const{ return this->workerID;}
     int getTitle() const{ return this->title;}
-    int getWorkedDays() const{ return this->workedDays;}
-    int getRestedDays() const{ return this->restedDays;}
-    int getlastWorkedDays() const{ return this->lastWorkedDay;}
+    //打印工人信息
+    void showWorkersInfo(){
+        cout<<"工人ID：" << workerID << " title：" << title <<"\n";
+        cout<<"工作日信息：" ;
+        for(int workedDay : workedDays)
+            cout<< workedDay << " " ;
+        cout<<endl;
+    }
+    //获取本周已工作的天数
+    int getWorkedDays() const{
+        int sum=0;
+        for(int workedDay : workedDays)
+            sum+=workedDay;
+        return sum;
+    }
+    //获取本周最后一天工作的那天， 周一～周日返回1～7，未工作返回0
+    int getlastWorkedDay() const{
+        for(int i=6;i>=0;i--){
+            if(workedDays[i]==1)
+                return i+1;
+        }
+        return 0;
+    }
+    //目前为止，本周已经连续休息的天数
+    //也就是最大连续0的个数
+    int getRestedDays() const{
+        int max0=0,max1=0;//存放最大连续串的个数
+        int zero=0,one=0;//0和1的计数器
+        for(int i=0;i<7;i++){
+            if(workedDays[i]==0){
+                zero++;
+                if(zero>max0) max0=zero;//将连续0串的最大值存放在变量max0中
+                if(one>max1) max1=one;//将连续1串的最大值存放在变量max1中
+                one=0;//将1的计数器清0
+            }
+            if(workedDays[i]==1){
+                one++;
+                if(zero>max0) max0=zero;
+                if(one>max1) max1=one;
+                zero=0;//将0的将计数器清0
+            }
+        }
+        return max0;
+    }
+    //是否连续休息了三天，每次修改上班信息后，都需要判断
+    bool isRestedTooMany () const{return this->getRestedDays() >= 3; }
     //判断某位工人休息时间是否大于2天
     bool isEnoughRest () const{
-        if(this->workedDays > 5) return false;
+        if(this->getWorkedDays() > 5 ) return false;
         else return true;
     }
     //在某天上班
     void goWorkAt(int day){
-        workedDays += 1;
-        //更新 连续休息的天数 = day - 最后一次工作的日子 - 1;
-        restedDays = day - lastWorkedDay - 1;
-        //更新最后一次工作的日子
-        lastWorkedDay = day;
+        workedDays[day-1]=1;
     }
-    //是否连续休息了三天，每次修改上班信息后，都需要判断
-    bool isRestedTooMany () const{return restedDays >= 3; }
+    //取消在某天上班
+    void cancelWorkAt(int day){
+        workedDays[day-1]=0;
+    }
+
     //friend class Schedule;
 };
 
@@ -103,9 +148,15 @@ public:
         }
         return true;
     }
+    //安排某名工人在某天上班
     void setWorkerAt(int worker,int day){
         this->table[day-1][worker-1] = 1;
         this->days[day-1] += 1;
+    }
+    //取消某名工人在某天上班
+    void cancelWorkerAt(int worker,int day){
+        this->table[day-1][worker-1] = 0;
+        this->days[day-1] -=1;
     }
 
     //friend class Workers;
@@ -121,6 +172,16 @@ int ArrangeWork(Workers &p,Schedule &s,int day){
     return SUCCESS;
 }
 
+//取消某位工人在某天上班
+int CancelWork(Workers &p,Schedule &s,int day){
+    //检查是否已经在这天休息了
+    if(s.getTableValue(day,p.getID()) == 0)
+        return FAILED;
+    p.cancelWorkAt(day);
+    s.cancelWorkerAt(p.getID(),day);
+    return SUCCESS;
+}
+
 int main(){
     Workers worker1(1,Senior);
     Workers worker2(2,Senior);
@@ -133,8 +194,12 @@ int main(){
     Schedule schedule(table);
     //test
     ArrangeWork(worker1,schedule,1);
+    ArrangeWork(worker1,schedule,3);
+    worker1.showWorkersInfo();
     schedule.showTable();
-
-
+    CancelWork(worker1,schedule,1);
+    ArrangeWork(worker1,schedule,4);
+    worker1.showWorkersInfo();
+    schedule.showTable();
     return 0;
 }

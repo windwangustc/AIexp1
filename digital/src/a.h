@@ -11,6 +11,7 @@
 #include <vector>
 #include <queue>
 #include <ctime>
+#include <utility>
 #include <algorithm>
 
 #endif //EXP1_DIGITAL_H
@@ -32,13 +33,14 @@ struct SearchStates{
     int cost;       //cost=g+h
     int depth;      //当前走的步数，也就是g
     int action;     //记录当前状态是通过哪种状态到达的，回溯路径时需要
-    struct SearchStates* previousState;     //指向上一个状态
-    vector<vector<int>> stateMatrix;
+    struct SearchStates* previousState;     //指向上一个状态，回溯路径时需要
+    vector<vector<int>> stateMatrix;        //当前的棋盘矩阵
 
     //重载<运算符，用于优先队列，cost小的优先
     bool operator < (const SearchStates &r) const{
         return this->cost > r.cost;
     }
+    //构造函数
     SearchStates(int c, int d,int a,struct SearchStates* p, vector<vector<int>> m): cost(c), depth(d), action(a), previousState(p), stateMatrix(std::move(m)) {}
 };
 SearchStates *g_goalState;
@@ -49,7 +51,7 @@ void A_h2(const vector<vector<int> > &start, const vector<vector<int> > &target)
 void IDA_h1(const vector<vector<int> > &start, const vector<vector<int> >&target);
 void IDA_h2(const vector<vector<int> > &start, const vector<vector<int> > &target);
 
-vector<vector<int>> ReadFile(string FileName);
+vector<vector<int>> ReadFile(const string& FileName);
 /*启发式函数h1 = CountMisplacedStars */
 int CountMisplacedStars(const vector<vector<int>> &sourceMatrix, const vector<vector<int>> &targetMatrix);
 int h2(const vector<vector<int>> &sourceMatrix, const vector<vector<int>> &targetMatrix);
