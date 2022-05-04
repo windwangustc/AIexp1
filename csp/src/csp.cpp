@@ -287,7 +287,7 @@ int main(){
         ofstream output1;
         output1.open("../output/output1.txt", ios::out | ios::trunc );  //删除写
         if(!output1.is_open()){
-            throw logic_error("open output_A_h1.txt Failed!");
+            throw logic_error("open output1.txt Failed!");
         }
         for(int i = 0; i<7;i++){
             for(int j = 0; j<7; j++){
@@ -315,7 +315,7 @@ int main(){
         ofstream output2;
         output2.open("../output/output2.txt", ios::out | ios::trunc );  //删除写
         if(!output2.is_open()){
-            throw logic_error("open output_A_h1.txt Failed!");
+            throw logic_error("open output2.txt Failed!");
         }
         for(int i = 0; i<7;i++){
             for(int j = 0; j<10; j++){
