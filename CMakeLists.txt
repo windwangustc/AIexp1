@@ -6,4 +6,4 @@ set(CMAKE_CXX_STANDARD 14)
 #add_executable(exp1 digital/src/a.cpp)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "../csp/src/")
-add_executable(exp1 csp/src/csp_v1.cpp)
+add_executable(exp1 csp/src/csp.cpp)
